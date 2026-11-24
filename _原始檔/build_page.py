@@ -1,19 +1,19 @@
-"""手機版幹話曆落地頁 v1（2026-11-25）：照手機版煦暖曆 v8 版型（結構照幹話曆新版落地頁（旅行 v28 規範的區塊順序），
+"""手機版幹話曆落地頁 v2（2026-11-25，加幹話小人貼紙點綴）：照手機版煦暖曆 v8 版型（結構照幹話曆新版落地頁（旅行 v28 規範的區塊順序），
 視覺語言換成 iPhone 介面（Widget 方塊、毛玻璃對話框、動態島、設定頁、鎖定畫面）。
 字一律思源黑體（手機版日曆規則）。產出 WORK/page.html，432 寬。"""
 import os, json
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORK = '/private/tmp/claude-501/-Users-ningchang--claude-spares-spare-83sWsf/8be7a878-1d74-40b6-a934-3282ef5f9fed/scratchpad/work_gh'
-V = 'v1'
+V = 'v2'
 
 P = [
     dict(n='01', who='怕忘記撕的人', say='日曆好美好想買，<br>可是怕自己忘記撕？很浪費...', img='p1', w='p1_w', wpos='right:14px;bottom:14px', spos='max-width:310px',
          nar='不用撕也不會忘，<mark>解鎖手機</mark>，今天的幹話都已更新好！'),
-    dict(n='02', who='厭世上班族', say='每天上班，<br>都在等下班', img='p2', w='p2_w', wpos='right:14px;bottom:14px',
+    dict(n='02', who='厭世上班族', say='每天上班，<br>都在等下班', img='p2', w='p2_w', wpos='right:14px;bottom:14px', st=('dance', 'right:-4px;top:-50px;width:82px;transform:rotate(8deg)'),
          nar='上班前<mark>滑開手機</mark>，先笑一下再去面對老闆。'),
     dict(n='03', who='交換禮物', say='朋友在國外，<br>交換禮物寄不過去', img='p3', w='p3_w', wpos='left:14px;bottom:14px',
          nar='轉寄一封兌換碼就送到，他每天<mark>解鎖手機</mark>都笑出來。'),
-    dict(n='04', who='聖誕禮物', say='送給每天<br>辛苦上班的他', img='p4', w='p4_w', wpos='left:14px;bottom:14px',
+    dict(n='04', who='聖誕禮物', say='送給每天<br>辛苦上班的他', img='p4', w='p4_w', wpos='left:14px;bottom:14px', st=('puddle', 'right:-8px;top:-34px;width:98px;transform:rotate(-4deg)'),
          nar='每天打開手機一句幹話，陪他<mark>笑著上班</mark> 365 天。'),
 ]
 CAPS6 = ['<small>JAN. 1</small>今天也沒有成為更好的人，但成功活到了今天。', '<small>JAN. 3</small>我的財富自由，就是自由地沒有財富。',
@@ -128,7 +128,7 @@ mark{color:var(--wine);font-weight:500;background:linear-gradient(transparent 60
 #s11 .row .k{width:46px;flex:none;color:var(--ink);font-weight:500}
 #s11 .row .v{flex:1;text-align:right;color:var(--gray)}
 /* 收尾：鎖定畫面 */
-#s12{padding-bottom:48px}
+#s12{padding-bottom:64px}
 .lock{position:relative;height:640px;border-radius:44px;overflow:hidden;background-size:cover;background-position:center;color:#fff;box-shadow:0 14px 34px rgba(30,24,28,.3);border:6px solid #1d1b1c}
 .lock .isl{position:absolute;left:50%;top:12px;width:104px;height:30px;margin-left:-52px;border-radius:999px;background:#000}
 .lock .dt{text-align:center;margin-top:62px;font-size:15px;font-weight:500;letter-spacing:.06em;opacity:.92}
@@ -142,6 +142,7 @@ mark{color:var(--wine);font-weight:500;background:linear-gradient(transparent 60
 .end .en{font-size:10.5px;color:var(--co)}
 .end .t{font-size:16px;font-weight:500}
 
+.gst{position:absolute;z-index:6;height:auto;filter:drop-shadow(0 4px 6px rgba(43,38,34,.2));pointer-events:none}
 /* 幹話曆配色 */
 :root{--bg:#FFF8EC;--bg2:#FCEFD8;--ink:#2B2622;--co:#C4562A;--wine:#C4562A;--gray:#6B625A;--line:#EADFCB;--yl:#F6D34A}
 h2 .u,.how h3 .u{background:linear-gradient(transparent 60%,rgba(246,211,74,.75) 60%)}
@@ -163,12 +164,17 @@ mark{color:var(--ink);font-weight:700;background:linear-gradient(transparent 55%
 #s09 dl>*:nth-last-child(-n+2){border-bottom:none}
 '''
 
+def st(name, style):
+    """幹話小人貼紙（白邊、淡陰影），放在留白處，不壓手機、Widget 和字"""
+    return f'<img class="gst" src="img/st_{name}.png" style="{style}">'
+
 def s03():
-    h = '''<section id="s03" class="alt"><div class="eb">誰適合手機版幹話曆？</div>
+    h = '''<section id="s03" class="alt"><div class="eb">誰適合手機版幹話曆？</div>''' + st('point', 'right:10px;top:8px;width:70px;transform:rotate(6deg)') + '''
 <h2>聖誕禮物 x 交換禮物<br><span class="u h2s">遠距離好友也能及時收到的聖誕禮物</span></h2>'''
     for x in P:
         wd = f'<img class="wd" src="img/{x["w"]}.png" style="{x["wpos"]}">' if x['w'] else ''
-        h += f'''<div class="ac"><div class="tag"><span class="no en">NO.{x['n']}</span>{x['who']}</div>
+        sk = st(*x['st']) if x.get('st') else ''
+        h += f'''<div class="ac">{sk}<div class="tag"><span class="no en">NO.{x['n']}</span>{x['who']}</div>
 <div class="box shadow"><div class="pic" style="background-image:url(img/{x['img']}.jpg)"><div class="say" style="{x.get('spos', '')}">{x['say']}</div>{wd}</div>
 <div class="nar">{x['nar']}</div></div></div>'''
     return h + '</section>'
@@ -188,11 +194,11 @@ def s05():
     return f'''<section id="s05"><div class="eb">從元旦到跨年</div>
 <h2>365 天，<br><span class="u">天天都有一句幹話</span></h2>
 <div class="lead">每一天都是新的厭世金句，<br>再配一隻手繪小白陪你演。</div>
-<div style="position:relative"><div class="wallp"><div class="g">{imgs}</div><div class="more">每天一句，一年 365 句</div></div>
+<div style="position:relative">{st('lazy', 'left:-6px;top:-74px;width:100px;transform:rotate(-3deg)')}<div class="wallp"><div class="g">{imgs}</div><div class="more">每天一句，一年 365 句</div></div>
 <div class="badge" style="right:-6px;top:-10px">365</div></div></section>'''
 
-def how(n, sid, h, d, clip, cn, ee, pill, ppos, cls=''):
-    return f'''<section id="{sid}" class="how {cls}"><div class="hd"><span class="no en">HOW TO USE {n:02d}</span>
+def how(n, sid, h, d, clip, cn, ee, pill, ppos, cls='', sk=''):
+    return f'''<section id="{sid}" class="how {cls}">{sk}<div class="hd"><span class="no en">HOW TO USE {n:02d}</span>
 <h3>{h}</h3><p class="d">{d}</p></div>
 <div class="pn shadow"><div class="ph" data-clip="{clip}" style="background-image:url(gif/clips/{clip}/001.jpg)"></div>
 <div class="pill" style="{ppos}"><i></i>{pill}</div>
@@ -230,7 +236,7 @@ def s09():
             ('注意事項', '請勿在開會時打開'),
             ('保存方式', '手機桌面，一解鎖就看得到的地方')]
     dl = ''.join(f'<dt>{a}</dt><dd>{b}</dd>' for a, b in rows)
-    return f'''<section id="s09"><div class="eb">本品為日曆，不是藥</div>
+    return f'''<section id="s09">{st('point', 'left:16px;top:52px;width:70px;transform:scaleX(-1) rotate(-6deg)')}<div class="eb">本品為日曆，不是藥</div>
 <h2>上班前，<br><span class="u">請先服用一頁</span></h2>
 <div class="note shadow"><div class="nb"><span>‹ 備忘錄</span><span class="ic"></span></div>
 <div class="nt"><div class="tt">幹話日曆 2027 使用說明書</div><div class="dd">2026 年 12 月 25 日 上午 9:00</div><dl>{dl}</dl></div></div></section>'''
@@ -238,7 +244,7 @@ def s09():
 def s10():
     K = [('S', '小', '保留桌面空間'), ('M', '中', '語錄清楚展開'), ('L', '大', '完整閱讀每日內容')]
     ph = ''.join(f'<figure><div class="ip"><div style="background-image:url(img/scr_{a}.png)"></div></div><div class="k"><b>{b}</b>{c}</div></figure>' for a, b, c in K)
-    return f'''<section id="s10" class="alt"><div class="eb">桌面尺寸</div>
+    return f'''<section id="s10" class="alt">{st('bubble', 'right:8px;top:10px;width:88px;transform:rotate(5deg)')}<div class="eb">桌面尺寸</div>
 <h2>三種尺寸，<br><span class="u">挑一個最適合你的桌面</span></h2>
 <div class="ph3">{ph}</div>
 <div class="nt">Android 依裝置與桌面配置，自由選擇比例</div></section>'''
@@ -248,7 +254,7 @@ def s11():
             ('尺寸', 'iOS 小・中・大<br>Android 依裝置選擇比例'), ('支援', 'iOS 16.4、Android 7.0 以上'),
             ('兌換', '付款後 Email 寄送兌換碼'), ('購買', '一次買斷，不是訂閱制'), ('回顧', '年度結束後，仍可在 App 回顧')]
     rr = ''.join(f'<div class="row"><span class="k">{a}</span><span class="v">{b}</span></div>' for a, b in rows)
-    return f'''<section id="s11"><div class="eb">規格</div>
+    return f'''<section id="s11">{st('phone', 'right:4px;top:24px;width:102px;transform:rotate(3deg)')}<div class="eb">規格</div>
 <h2>買一次，<br><span class="u">陪你一整年</span></h2>
 <div class="set shadow"><div class="top"><span class="a">‹ 一般</span><span class="b">關於本日曆</span><span style="width:40px"></span></div>{rr}</div></section>'''
 
@@ -259,16 +265,16 @@ def s12():
 <div class="dt">1月1日 星期五</div><div class="tm">7:30</div>
 <img class="wd" src="img/lock_w.png"><div class="msg">日子不一定會變好，<br>但每天可以先笑一下。</div>
 <div class="bt" style="left:30px">{fl}</div><div class="bt" style="right:30px">{cam}</div><div class="hb"></div></div>
-<div class="end"><span class="en">TO BE CONTINUED</span><span class="t">明天，還有一句</span></div></section>'''
+<div class="end"><span class="en">TO BE CONTINUED</span><span class="t">明天，還有一句</span></div>{st('lazy', 'right:2px;bottom:2px;width:84px;transform:rotate(2deg)')}</section>'''
 
 def build():
     os.makedirs(f'{WORK}/gif', exist_ok=True)
     json.dump([{'a_days': c} for c in CAPS6 for _ in range(12)], open(f'{WORK}/gif/caps_a_days.json', 'w'), ensure_ascii=False)
     body = (s03() + s03b() + s04() + s05()
-        + how(1, 's05a', '早上解鎖手機，<br>今天的幹話已經換好', '不用撕，也不怕忘，<br>先笑一下再起床。', 'c_unlock', '打開手機', 'UNLOCK', '每天自動更新', 'right:14px;top:14px')
+        + how(1, 's05a', '早上解鎖手機，<br>今天的幹話已經換好', '不用撕，也不怕忘，<br>先笑一下再起床。', 'c_unlock', '打開手機', 'UNLOCK', '每天自動更新', 'right:14px;top:14px', sk=st('phone', 'left:16px;top:16px;width:104px;transform:rotate(-4deg)'))
         + s06()
         + how(2, 's06a', '長按 Widget，<br>換一個喜歡的大小', 'iOS 小、中、大三種尺寸，<br>Android 依桌面自由調整比例。', 'c_resize', '換尺寸', 'RESIZE', '長按就能換', 'left:14px;top:14px', 'alt')
-        + how(3, 's07', '上班、放假、午休，<br>打開手機先笑一下', '不用帶厚厚的紙本，<br>幹話跟著手機去任何地方。', 'c_where', '隨身帶著', 'ANYWHERE', '在哪都笑得出來', 'right:14px;top:14px')
+        + how(3, 's07', '上班、放假、午休，<br>打開手機先笑一下', '不用帶厚厚的紙本，<br>幹話跟著手機去任何地方。', 'c_where', '隨身帶著', 'ANYWHERE', '在哪都笑得出來', 'right:14px;top:14px', sk=st('dance', 'right:18px;top:10px;width:76px;transform:rotate(6deg)'))
         + s08() + s09() + s10() + s11() + s12())
     # 說明句一行放不下就四張一起縮（同一個字級）
     body += "<script>(()=>{const n=[...document.querySelectorAll('.ac .nar')];let f=15.5;const ok=()=>n.every(e=>e.scrollWidth<=e.clientWidth);while(!ok()&&f>12){f-=.1;n.forEach(e=>e.style.fontSize=f+'px')}document.body.dataset.narfs=f.toFixed(1)})()</script>"
